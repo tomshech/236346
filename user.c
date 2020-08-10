@@ -28,8 +28,8 @@ void credential_check_and_store(char* credential, char* credential_dst) {
     assume(credential > 0);
 
     //check to verify that every credential has at least MIN characters differ from space
-    int k = nd();
-    assume(k < MIN_LENGTH && credential[k] != '\0');
+//    int k = nd();
+//    assume(k < MIN_LENGTH && credential[k] != '\0');
 
     //check to verify that every credential has a suffix '\0'
     int j = nd();
