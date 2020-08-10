@@ -19,6 +19,8 @@ void set_insert(struct Set *s, int key);
 
 int set_get_element(struct Set *s, int index);
 
+void set_delete(struct Set *s, int key);
+
 bool set_has(struct Set *s, int key);
 
 

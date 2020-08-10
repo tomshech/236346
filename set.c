@@ -40,6 +40,13 @@ int set_get_element(struct Set *s, int index){
     return s->ghosts[index].val;
 }
 
+void set_delete(struct Set *s, int key){
+    for (int i = 0; i < N; i++) {
+        if (key == s->ghosts[i].val)
+            s->ghosts[i].has = 0;
+    }
+}
+
 bool set_has(struct Set *s, int key) {
     for (int i = 0; i < N; i++) {
         if (key == s->ghosts[i].val)
