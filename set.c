@@ -2,20 +2,18 @@
 // Created by tshech on 8/10/2020.
 //
 #include "set.h"
-#include <seahorn/seahorn.h>
-#include <stdlib.h>
 
 extern int nd();
 
 #define N 2
 
-struct ghost{
+struct set_element{
     int val;
     bool has;
 };
 
 struct Set {
-     struct ghost ghosts[N];
+     struct set_element ghosts[N];
 };
 
 
@@ -35,9 +33,20 @@ void set_insert(struct Set *s, int key) {
     }
 }
 
-int set_get_element(struct Set *s, int index){
-    assume (index >= 0 && index < N);
-    return s->ghosts[index].val;
+int set_get_element(struct Set *s, int key){
+    for (int i = 0; i < N; i++) {
+        if (key == s->ghosts[i].val)
+            return key;
+    }
+    return nd();
+}
+
+bool is_one_of_the_ghost(struct Set *s, int key){
+    for (int i = 0; i < N; i++) {
+        if (key == s->ghosts[i].val)
+            return true;
+    }
+    return false;
 }
 
 void set_delete(struct Set *s, int key){

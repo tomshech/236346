@@ -17,7 +17,9 @@ struct Set *set_create();
 
 void set_insert(struct Set *s, int key);
 
-int set_get_element(struct Set *s, int index);
+int set_get_element(struct Set *s, int key);
+
+bool is_one_of_the_ghost(struct Set *s, int key);
 
 void set_delete(struct Set *s, int key);
 
