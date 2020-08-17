@@ -14,4 +14,6 @@
 typedef struct user_t *Suser;
 
 int create_user(char* user_name, char* password, struct Set* all_users_id);
+
+void make_friend(int);
 #endif //INC_236346_USER_H

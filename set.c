@@ -3,8 +3,6 @@
 //
 #include "set.h"
 
-extern int nd();
-
 #define N 2
 
 struct set_element{
@@ -13,8 +11,29 @@ struct set_element{
 };
 
 struct Set {
-     struct set_element ghosts[N];
+    struct set_element ghosts[N];
 };
+
+//static void swap(int *xp, int *yp)
+//{
+//    int temp = *xp;
+//    *xp = *yp;
+//    *yp = temp;
+//}
+//
+//// A function to implement bubble sort
+//static void bubbleSort(struct Set *s)
+//{
+//    int i, j;
+//    for (i = 0; i < N; i++){
+//    // Last i elements are already in place
+//        for (j = 0; j < N-i-1; j++){
+//            if (s->ghosts[j].val > s->ghosts[j+1].val && s->ghosts[j].has == 1){
+//                swap(&(s->ghosts[j].val), &(s->ghosts[j+1].val));
+//            }
+//        }
+//    }
+//}
 
 
 struct Set *set_create() {
@@ -62,4 +81,17 @@ bool set_has(struct Set *s, int key) {
             return s->ghosts[i].has;
     }
     return nd();
+}
+
+//void set_sort(struct Set *s){
+//    bubbleSort(s);
+//}
+
+int set_get_max_element(struct Set *s){
+    int max = s->ghosts[0].val;
+    for (int i = 1; i < N; i++) {
+        if (s->ghosts[i].has && s->ghosts[i].val > max)
+            max = s->ghosts[i].val;
+    }
+    return max;
 }

@@ -10,7 +10,6 @@
 
 extern char *str_nd();
 extern int nd();
-extern unsigned int uint_nd();
 
 void *xmalloc(size_t sz) {
     void *p;
@@ -26,17 +25,15 @@ void str_copy(char* dest, char* src, int size){
 }
 
 void credential_check_and_store(char* credential, char* credential_dst) {
-    assume(credential > 0);
+//    assume(credential > 0);
 
     //check to verify that every credential has at least MIN characters differ from space
-//    int k = nd();
-//    assume(k >= 0 && k < MIN_LENGTH && credential[k] != '\0');
-
+    int k = nd();
+    assume(k >= 0 && k < MIN_LENGTH && credential[k] != '\0');
 
     //check to verify that every credential has a suffix '\0'
-    unsigned int j = uint_nd();
-    assume(j >= MIN_LENGTH && j < BUFFER_SIZE);
-    assume (credential[j] == '\0');
+    int j = nd();
+    assume(j >= MIN_LENGTH && j < BUFFER_SIZE && credential[j] == '\0');
 
     int size = MIN_LENGTH;
     for (; size < BUFFER_SIZE && credential[size] != '\0'; size++);
@@ -46,10 +43,9 @@ void credential_check_and_store(char* credential, char* credential_dst) {
     credential_dst[size] = '\0';
 
     //check to find that str_cpy really works
-    unsigned int i = uint_nd();
-    if (i < size){
-        sassert(credential[i] == credential_dst[i]);
-    }
+    int i = nd();
+    assume(i < size);
+    sassert(credential[i] == credential_dst[i]);
 }
 
 struct user_t{

@@ -8,6 +8,7 @@
 #define SET_SIZE 2
 
 extern int nd();
+extern unsigned int uint_nd();
 extern char *str_nd();
 
 
@@ -32,6 +33,18 @@ int main() {
         }
     }
 
+    struct Set* posts = set_create();
+    for (int i = 0; i < SET_SIZE; ++i) {
+        int key = nd();
+        int comments = nd();
+        assume(comments >= 0);
+        create_post(key, comments, posts);
+    }
+    int best_post_key = get_best_post(posts);
+    int nd_key = nd();
+    if (is_one_of_the_ghost(posts, nd_key) && set_has(posts, nd_key)){
+        sassert(best_post_key >= nd_key);
+    }
 
 //    int v1 = nd();
 //    int index_1 = nd();

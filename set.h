@@ -10,6 +10,8 @@
 #include <stdbool.h>
 
 extern int nd();
+//static void swap(int *xp, int *yp);
+//static void bubbleSort(struct Set *s);
 
 struct Set;
 
@@ -24,6 +26,10 @@ bool is_one_of_the_ghost(struct Set *s, int key);
 void set_delete(struct Set *s, int key);
 
 bool set_has(struct Set *s, int key);
+
+//void set_sort(struct Set *s);
+
+int set_get_max_element(struct Set *s);
 
 
 #endif //INC_236346_SET_H
