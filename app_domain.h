@@ -7,7 +7,6 @@
 
 #include <seahorn/seahorn.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include "set.h"
 #include "user.h"
 #include "post.h"
