@@ -11,11 +11,24 @@ extern int nd();
 extern unsigned int uint_nd();
 extern char *str_nd();
 
+typedef struct Entry {
+    void *data;
+    struct Entry *next;
+} Entry;
+
+typedef struct List {
+    Entry *head;
+} List;
+
+extern List* get_users_from_DB();
+
+
 
 int main() {
     int remembered_key;
     bool is_remember = false;
     struct Set* all_users_id = set_create();
+
     for (int i = 0; i < SET_SIZE; ++i) {
         char* username = str_nd();
         char* password = str_nd();
@@ -45,6 +58,30 @@ int main() {
     if (is_one_of_the_ghost(posts, nd_key) && set_has(posts, nd_key)){
         sassert(best_post_key >= nd_key);
     }
+
+    if (is_remember){
+        set_delete(all_users_id, remembered_key);
+        sassert(!(set_has(all_users_id, remembered_key)));
+    }
+//    b = false;
+//    List *users = get_users_from_DB();
+//    Entry *it;
+//    struct set_element* ghosts = get_set_elements(all_users_id);
+//    it = users->head;
+//    assume (it != NULL);
+//    for (int i=0; i < SET_SIZE;){
+//        assume (it->next != NULL);
+//        //assume(it->data == get_set_element(ghosts[i]));
+//        if (set_has(all_users_id, get_set_element(ghosts[i]))){
+//            assume(*((int*)(it->data)) == get_set_element(ghosts[i]));
+//            i++;
+//            if (!b)
+//                b = (remembered_key == *((int*)(it->data)));
+//        }
+//        it = it->next;
+//    }
+//    sassert(b);
+
 
 //    int v1 = nd();
 //    int index_1 = nd();

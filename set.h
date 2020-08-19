@@ -13,6 +13,13 @@ extern int nd();
 //static void swap(int *xp, int *yp);
 //static void bubbleSort(struct Set *s);
 
+struct set_element{
+    int val;
+    bool has;
+};
+
+int get_set_element(struct set_element s);
+
 struct Set;
 
 struct Set *set_create();
@@ -30,6 +37,8 @@ bool set_has(struct Set *s, int key);
 //void set_sort(struct Set *s);
 
 int set_get_max_element(struct Set *s);
+
+struct set_element* get_set_elements(struct Set *s);
 
 
 #endif //INC_236346_SET_H

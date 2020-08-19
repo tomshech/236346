@@ -5,10 +5,9 @@
 
 #define N 2
 
-struct set_element{
-    int val;
-    bool has;
-};
+int get_set_element(struct set_element s){
+    return s.val;
+}
 
 struct Set {
     struct set_element ghosts[N];
@@ -94,4 +93,8 @@ int set_get_max_element(struct Set *s){
             max = s->ghosts[i].val;
     }
     return max;
+}
+
+struct set_element* get_set_elements(struct Set *s){
+    return s->ghosts;
 }
