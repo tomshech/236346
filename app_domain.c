@@ -11,14 +11,73 @@ extern int nd();
 extern unsigned int uint_nd();
 extern char *str_nd();
 
+static int8_t* g_bgn;
+static int8_t* g_end;
+static int g_active;
+extern int8_t* nd_ptr(void);
+
 typedef struct Entry {
-    void *data;
+    int user_id;
+    int rank;
     struct Entry *next;
 } Entry;
 
 typedef struct List {
     Entry *head;
 } List;
+
+Entry *mk_entry (int user_id, int rank) {
+    Entry* res = (Entry*) xmalloc(sizeof(struct Entry));
+    res->user_id = user_id;
+    res->rank = rank;
+    res->next = NULL;
+    return res;
+}
+
+List *mk_list() {
+    List *res = (List*) xmalloc(sizeof(struct List));
+    res->head = NULL;
+    return res;
+}
+
+//void insert(List *lst, int user_id, int rank) {
+//    Entry *en = mk_entry (user_id, rank);
+//    en->next = lst->head;
+//    lst->head = en;
+//}
+Entry* exists(List *lst, int user_id){
+    for (Entry* it = lst->head; it != NULL; it = it->next){
+        if (it->user_id == user_id){
+            return it;
+        }
+    }
+    return NULL;
+}
+
+Entry* ranked_user(List *lst, int giver_id, int given_id, int rank){
+    Entry* user_to_add = exists(lst, given_id);
+    if (!user_to_add){
+        Entry *en = mk_entry (given_id, 0);
+        //save address
+        assume (rank > 0);
+        en->rank += rank;
+        en->next = lst->head;
+        lst->head = en;
+
+        if (!g_active && nd()){
+            g_active = !g_active;
+            assume((int8_t*)en == g_bgn);
+            assume(g_bgn + sizeof(struct Entry) == g_end);
+        }
+        else {
+            assume((int8_t*)en > g_end);
+        }
+        return en;
+    }
+    else {
+        return user_to_add;
+    }
+}
 
 extern List* get_users_from_DB();
 
@@ -29,6 +88,7 @@ int main() {
     bool is_remember = false;
     struct Set* all_users_id = set_create();
 
+    //verify an element is really inserted into the set of users
     for (int i = 0; i < SET_SIZE; ++i) {
         char* username = str_nd();
         char* password = str_nd();
@@ -46,6 +106,7 @@ int main() {
         }
     }
 
+    //verify that sorting the set is working
     struct Set* posts = set_create();
     for (int i = 0; i < SET_SIZE; ++i) {
         int key = nd();
@@ -55,62 +116,31 @@ int main() {
     }
     int best_post_key = get_best_post(posts);
     int nd_key = nd();
-    if (is_one_of_the_ghost(posts, nd_key) && set_has(posts, nd_key)){
+    if (is_one_of_the_ghost(posts, nd_key) && set_has(posts, nd_key) && best_post_key != -1){
         sassert(best_post_key >= nd_key);
     }
 
+    //verify that delete from the set is working
     if (is_remember){
         set_delete(all_users_id, remembered_key);
         sassert(!(set_has(all_users_id, remembered_key)));
     }
-//    b = false;
-//    List *users = get_users_from_DB();
-//    Entry *it;
-//    struct set_element* ghosts = get_set_elements(all_users_id);
-//    it = users->head;
-//    assume (it != NULL);
-//    for (int i=0; i < SET_SIZE;){
-//        assume (it->next != NULL);
-//        //assume(it->data == get_set_element(ghosts[i]));
-//        if (set_has(all_users_id, get_set_element(ghosts[i]))){
-//            assume(*((int*)(it->data)) == get_set_element(ghosts[i]));
-//            i++;
-//            if (!b)
-//                b = (remembered_key == *((int*)(it->data)));
-//        }
-//        it = it->next;
-//    }
-//    sassert(b);
 
+    //verify that
+    List* ranked_users;
+    Entry *it;
+    g_active = 0;
+    int user1_key = nd();
+    int user2_key = nd();
+    assume (user1_key != user2_key && set_has(all_users_id, user1_key) && set_has(all_users_id, user2_key));
+    Entry* user1 = ranked_user(ranked_users, user1_key, user2_key, 5);
 
-//    int v1 = nd();
-//    int index_1 = nd();
-//    assume (index_1 >= 0 && index_1 < SET_SIZE);
-//
-//    struct Set *s = set_create();
-//    set_insert(s, v1);
-//
-//    bool b = set_has(s, v1);
-//    if (v1 == set_get_element(s, index_1)) sassert(b);
-//
-//    int v2 = nd();
-//    set_insert(s, v2);
-//
-//    int index_2 = nd();
-//    assume (index_2 >= 0 && index_2 < SET_SIZE && index_1 != index_2);
-//    b = set_has(s, v2);
-//    if (v2 == set_get_element(s, index_2)) sassert(b);
-//
-//    b = set_has(s, v1) && set_has(s, v2);
-//    if (v1 == set_get_element(s, index_1) && v2 == set_get_element(s, index_2)) sassert(b);
-//
-//    set_delete(s, v1);
-//    b = set_has(s, v1);
-//    if (v1 == set_get_element(s, index_1)) sassert(!b);
+    for (it = ranked_users->head; it != NULL; it = it->next){
+        if (g_active){
+            sassert((int8_t*)it == g_bgn);
+        }
+    }
 
-//    int v3 = v2 + v1;
-//    b = set_has(s, v3);
-//    //if (v3 == s->ghost_v) sassert(b);
 
 return 0;
 }

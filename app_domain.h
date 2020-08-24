@@ -10,4 +10,6 @@
 #include "set.h"
 #include "user.h"
 #include "post.h"
+
+void *xmalloc(size_t sz);
 #endif //INC_236346_APP_DOMAIN_H

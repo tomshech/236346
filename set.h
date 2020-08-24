@@ -34,7 +34,7 @@ void set_delete(struct Set *s, int key);
 
 bool set_has(struct Set *s, int key);
 
-//void set_sort(struct Set *s);
+void set_sort(struct Set *s);
 
 int set_get_max_element(struct Set *s);
 

@@ -52,7 +52,8 @@ struct user_t{
 
 int create_user(char* user_name, char* password, struct Set* all_users_id){
     Suser user = (Suser)xmalloc(sizeof(struct user_t));
-    credential_check_and_store(user_name, user->m_User_name);
+    //TODO return to code
+//    credential_check_and_store(user_name, user->m_User_name);
 
     user->m_Friends_id_list = set_create();
 
