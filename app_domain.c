@@ -16,6 +16,8 @@ static int8_t* g_end;
 static int g_active;
 extern int8_t* nd_ptr(void);
 
+extern Suser* users_nd();
+
 typedef struct Entry {
     int user_id;
     int rank;
@@ -26,7 +28,7 @@ typedef struct List {
     Entry *head;
 } List;
 
-Entry *mk_entry (int user_id, int rank) {
+Entry *mk_node (int user_id, int rank) {
     Entry* res = (Entry*) xmalloc(sizeof(struct Entry));
     res->user_id = user_id;
     res->rank = rank;
@@ -57,26 +59,35 @@ Entry* exists(List *lst, int user_id){
 Entry* ranked_user(List *lst, int giver_id, int given_id, int rank){
     Entry* user_to_add = exists(lst, given_id);
     if (!user_to_add){
-        Entry *en = mk_entry (given_id, 0);
+        Entry *node = mk_node (given_id, 0);
         //save address
         assume (rank > 0);
-        en->rank += rank;
-        en->next = lst->head;
-        lst->head = en;
+        node->rank += rank;
+        node->next = lst->head;
+        lst->head = node;
 
         if (!g_active && nd()){
             g_active = !g_active;
-            assume((int8_t*)en == g_bgn);
+            assume((int8_t*)node == g_bgn);
             assume(g_bgn + sizeof(struct Entry) == g_end);
         }
         else {
-            assume((int8_t*)en > g_end);
+            assume((int8_t*)node > g_end);
         }
-        return en;
+        return node;
     }
     else {
         return user_to_add;
     }
+}
+
+bool exists_in_set(Suser* set, Suser element){
+    for (int i = 0; i < 5; ++i) {
+        if (set[i] == element){
+            return true;
+        }
+    }
+    return false;
 }
 
 extern List* get_users_from_DB();
@@ -140,6 +151,20 @@ int main() {
             sassert((int8_t*)it == g_bgn);
         }
     }
+
+//    Suser* users = users_nd();
+//    Suser* best_users = xmalloc(5* sizeof(Suser));
+//    int k = 0;
+//    for (int j = 0; j < 5; ++j) {
+//        assume(users[j] != NULL);
+//        //if(nd()){
+//            best_users[k++] = users[j];
+//        //}
+//    }
+//    int l = nd();
+//    assume (l >= 0 && l < k);
+//    sassert(best_users[l] == users[l]);
+//    //sassert(exists_in_set(users, best_users[l]));
 
 
 return 0;
