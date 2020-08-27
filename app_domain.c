@@ -14,36 +14,37 @@ extern char *str_nd();
 static int8_t* g_bgn;
 static int8_t* g_end;
 static int g_active;
+static int remember_id;
 extern int8_t* nd_ptr(void);
 
 extern Suser* users_nd();
 
-typedef struct Entry {
+typedef struct Node {
     int user_id;
     int rank;
-    struct Entry *next;
-} Entry;
+    struct Node *next;
+} Node;
 
-typedef struct List {
-    Entry *head;
-} List;
+typedef struct Set{
+    Node *head;
+} Set;
 
-Entry *mk_node (int user_id, int rank) {
-    Entry* res = (Entry*) xmalloc(sizeof(struct Entry));
+Node *mk_node (int user_id, int rank) {
+    Node* res = (Node*) xmalloc(sizeof(struct Node));
     res->user_id = user_id;
     res->rank = rank;
     res->next = NULL;
     return res;
 }
 
-List *mk_list() {
-    List *res = (List*) xmalloc(sizeof(struct List));
+Set* mk_list() {
+    Set*res = (Set*) xmalloc(sizeof(struct Set));
     res->head = NULL;
     return res;
 }
 
-Entry* exists(List *lst, int user_id){
-    for (Entry* it = lst->head; it != NULL; it = it->next){
+Node* exists(Set*lst, int user_id){
+    for (Node* it = lst->head; it != NULL; it = it->next){
         if (it->user_id == user_id){
             return it;
         }
@@ -51,11 +52,10 @@ Entry* exists(List *lst, int user_id){
     return NULL;
 }
 
-Entry* ranked_user(List *lst, int giver_id, int given_id, int rank){
-    Entry* user_to_add = exists(lst, given_id);
+Node* ranked_user(Set*lst, int giver_id, int given_id, int rank){
+    Node* user_to_add = exists(lst, given_id);
     if (!user_to_add){
-        Entry *node = mk_node (given_id, 0);
-        //save address
+        Node *node = mk_node (given_id, 0);
         assume (rank > 0);
         node->rank += rank;
         node->next = lst->head;
@@ -63,8 +63,9 @@ Entry* ranked_user(List *lst, int giver_id, int given_id, int rank){
 
         if (!g_active && nd()){
             g_active = !g_active;
+            remember_id = node->user_id;
             assume((int8_t*)node == g_bgn);
-            assume(g_bgn + sizeof(struct Entry) == g_end);
+            assume(g_bgn + sizeof(struct Node) == g_end);
         }
         else {
             assume((int8_t*)node > g_end);
@@ -128,18 +129,21 @@ int main() {
         sassert(!(set_has(all_users_id, remembered_key)));
     }
 
-    //verify that
-    List* ranked_users;
-    Entry *it;
+    //verify there is no memory overlap on one of the elements in the list
+    Set* ranked_users;
+    Node *it;
     g_active = 0;
     int user1_key = nd();
     int user2_key = nd();
     assume (user1_key != user2_key && set_has(all_users_id, user1_key) && set_has(all_users_id, user2_key));
-    Entry* user1 = ranked_user(ranked_users, user1_key, user2_key, 5);
+    Node* user1 = ranked_user(ranked_users, user1_key, user2_key, 5);
+    Node* user2 = ranked_user(ranked_users, user2_key, user1_key, 10);
 
     for (it = ranked_users->head; it != NULL; it = it->next){
-        if (g_active){
+        if (g_active && it->user_id == remember_id){
             sassert((int8_t*)it == g_bgn);
+        }else{
+            sassert((int8_t*)it > g_end);
         }
     }
 
