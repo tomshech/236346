@@ -43,8 +43,8 @@ Set* mk_list() {
     return res;
 }
 
-Node* exists(Set*lst, int user_id){
-    for (Node* it = lst->head; it != NULL; it = it->next){
+Node* exists(Set* set, int user_id){
+    for (Node* it = set->head; it != NULL; it = it->next){
         if (it->user_id == user_id){
             return it;
         }
@@ -52,14 +52,14 @@ Node* exists(Set*lst, int user_id){
     return NULL;
 }
 
-Node* ranked_user(Set*lst, int giver_id, int given_id, int rank){
-    Node* user_to_add = exists(lst, given_id);
+Node* ranked_user(Set* set, int giver_id, int given_id, int rank){
+    Node* user_to_add = exists(set, given_id);
     if (!user_to_add){
         Node *node = mk_node (given_id, 0);
         assume (rank > 0);
         node->rank += rank;
-        node->next = lst->head;
-        lst->head = node;
+        node->next = set->head;
+        set->head = node;
 
         if (!g_active && nd()){
             g_active = !g_active;
@@ -147,6 +147,8 @@ int main() {
         }
     }
 
+    //verify that a partial set of other set (like set of someone's friends in facebook from the set of all users in
+    // facebook) is totally icluded in it
     Suser* users = users_nd();
     Suser* best_users = xmalloc(5* sizeof(Suser));
     int k = 0;
@@ -159,6 +161,7 @@ int main() {
     int l = nd();
     assume (l >= 0 && l < k);
     sassert(exists_in_set(users, best_users[l]));
+    free(best_users);
 
 
 return 0;
