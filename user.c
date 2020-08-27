@@ -6,7 +6,6 @@
 
 #define BUFFER_SIZE 8
 #define MIN_LENGTH 4
-#define N 2
 
 extern char *str_nd();
 extern int nd();
@@ -46,8 +45,6 @@ struct user_t{
     int m_UserId;
     //to be defined
     struct Set* m_Friends_id_list;
-    //to be defined
-    //messagesList m_ListofMessages
 };
 
 int create_user(char* user_name, char* password, struct Set* all_users_id){

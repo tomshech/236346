@@ -42,11 +42,6 @@ List *mk_list() {
     return res;
 }
 
-//void insert(List *lst, int user_id, int rank) {
-//    Entry *en = mk_entry (user_id, rank);
-//    en->next = lst->head;
-//    lst->head = en;
-//}
 Entry* exists(List *lst, int user_id){
     for (Entry* it = lst->head; it != NULL; it = it->next){
         if (it->user_id == user_id){
@@ -89,10 +84,6 @@ bool exists_in_set(Suser* set, Suser element){
     }
     return false;
 }
-
-extern List* get_users_from_DB();
-
-
 
 int main() {
     int remembered_key;
@@ -152,19 +143,18 @@ int main() {
         }
     }
 
-//    Suser* users = users_nd();
-//    Suser* best_users = xmalloc(5* sizeof(Suser));
-//    int k = 0;
-//    for (int j = 0; j < 5; ++j) {
-//        assume(users[j] != NULL);
-//        //if(nd()){
-//            best_users[k++] = users[j];
-//        //}
-//    }
-//    int l = nd();
-//    assume (l >= 0 && l < k);
-//    sassert(best_users[l] == users[l]);
-//    //sassert(exists_in_set(users, best_users[l]));
+    Suser* users = users_nd();
+    Suser* best_users = xmalloc(5* sizeof(Suser));
+    int k = 0;
+    for (int j = 0; j < 5; ++j) {
+        assume(users[j] != NULL);
+        if(nd()){
+            best_users[k++] = users[j];
+        }
+    }
+    int l = nd();
+    assume (l >= 0 && l < k);
+    sassert(exists_in_set(users, best_users[l]));
 
 
 return 0;
