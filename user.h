@@ -14,7 +14,22 @@
 
 typedef struct user_t *Suser;
 
-int create_user(char* user_name, char* password, struct Set* all_users_id);
+//gets a src, dst addresses and size and copy from source to destination
+// safe copy - copy only first size characters that must to be smaller than BUFFER_SIZE
+void str_copy(char *dest, char *src, int size);
 
-void make_friend(int);
+//gets user credential and verifies that the credential is correctly copied to the dst address
+void credential_check_and_store(char *credential, char *credential_dst);
+
+//gets user name, password and set of all the users
+//create a new user, gives him a unique key and returns it
+//"stores" the user in the DB
+Suser create_user(char *user_name, char *password, struct Set *all_users_id);
+
+//gets a user and return its unique key
+void delete_user(Suser user);
+
+//gets a user and delete it to avoid memory leaks
+int get_user_key(Suser user);
+
 #endif //INC_236346_USER_H

@@ -7,6 +7,11 @@
 
 #include "set.h"
 
-void create_post(int key, int comments, struct Set* posts);
+typedef struct post *Post;
+
+Post create_post(int key, int comments, struct Set* posts);
+
+void delete_post(Post post);
+
 int get_best_post(struct Set* posts);
 #endif //INC_236346_POST_H
