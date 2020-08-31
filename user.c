@@ -45,6 +45,11 @@ Suser create_user(char* user_name, char* password, struct Set* all_users_id){
     credential_check_and_store(user_name, user->m_User_name);
 
     int key = nd();
+    //each user gets a unique key
+    if (is_one_of_the_ghost(all_users_id, key)){
+        //if it's one of the ghosts, then it is not part of the set
+        assume (!set_has(all_users_id, key));
+    }
     user->m_UserId = key;
     set_insert(all_users_id, key);
     return user;

@@ -2,7 +2,11 @@
 // Created by tshech on 8/10/2020.
 //
 
-#include "app_domain.h"
+#include <seahorn/seahorn.h>
+#include <stdlib.h>
+#include "set.h"
+#include "user.h"
+#include "post.h"
 
 
 #define SET_SIZE 3
