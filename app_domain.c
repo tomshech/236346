@@ -67,7 +67,11 @@ Node *exists(Set *set, int user_id) {
     return NULL;
 }
 
-//gets a
+//gets a set, a user_id and a rank to give to the user
+//the user is added to the set if it hasn't already been part of it
+//one user is picked and its begin and end address are saved
+//if we don't pick this specific user we demand it will be allocated in a later address.
+//finally the added user is returned
 Node *ranked_user(Set *set, int given_id, int rank) {
     Node *user_to_add = exists(set, given_id);
     if (!user_to_add) {
@@ -91,6 +95,8 @@ Node *ranked_user(Set *set, int given_id, int rank) {
     }
 }
 
+//gets a set and a set element
+//returns true if the element is part of the set, false otherwise
 bool exists_in_set(Suser *set, Suser element) {
     for (int i = 0; i < 5; ++i) {
         if (set[i] == element) {
@@ -118,6 +124,7 @@ int main() {
             is_remember = !is_remember;
             remembered_key = key;
         }
+        //To avoid memory leaks
         delete_user(user);
     }
     bool b = set_has(all_users_id, remembered_key);
@@ -139,6 +146,7 @@ int main() {
         if (is_one_of_the_ghost(posts, key)) {
             assume(!set_has(posts, key));
             Post post = create_post(key, comments, posts);
+            //To avoid memory leaks
             delete_post(post);
         }
     }
