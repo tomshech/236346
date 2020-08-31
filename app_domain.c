@@ -129,8 +129,12 @@ int main() {
         int key = nd();
         int comments = nd();
         assume(comments >= 0);
-        Post post = create_post(key, comments, posts);
-        delete_post(post);
+        //every post's key has to be unique
+        if (is_one_of_the_ghost(posts, key)){
+            assume(!set_has(posts, key));
+            Post post = create_post(key, comments, posts);
+            delete_post(post);
+        }
     }
     int best_post_key = get_best_post(posts);
     int nd_key = nd();
