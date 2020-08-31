@@ -3,7 +3,7 @@
 //
 #include "set.h"
 
-#define SET_SIZE 2
+#define SET_SIZE 3
 
 int get_set_element(struct set_element s){
     return s.val;
@@ -105,4 +105,18 @@ int set_get_max_element(struct Set *s){
 
 struct set_element* get_set_elements(struct Set *s){
     return s->ghosts;
+}
+
+bool set_verify_sort(struct Set *s){
+    unsigned i = uint_nd();
+    unsigned j = uint_nd();
+    assume (i < j && i < SET_SIZE && j < SET_SIZE);
+    if (s->ghosts[i].val >= s->ghosts[j].val){
+        return true;
+    }
+    return false;
+}
+
+void delete_set(struct Set *s){
+    free(s);
 }

@@ -10,8 +10,7 @@
 #include <stdbool.h>
 
 extern int nd();
-//static void swap(int *xp, int *yp);
-//static void bubbleSort(struct Set *s);
+extern unsigned int uint_nd();
 
 struct set_element{
     int val;
@@ -39,6 +38,10 @@ void set_sort(struct Set *s);
 int set_get_max_element(struct Set *s);
 
 struct set_element* get_set_elements(struct Set *s);
+
+bool set_verify_sort(struct Set *s);
+
+void delete_set(struct Set *s);
 
 
 #endif //INC_236346_SET_H

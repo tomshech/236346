@@ -5,7 +5,7 @@
 #include "app_domain.h"
 
 
-#define SET_SIZE 2
+#define SET_SIZE 3
 
 extern int nd();
 extern unsigned int uint_nd();
@@ -35,6 +35,10 @@ Node *mk_node (int user_id, int rank) {
     res->rank = rank;
     res->next = NULL;
     return res;
+}
+
+void delete_node(Node* node){
+    free(node);
 }
 
 Set* mk_list() {
@@ -95,11 +99,13 @@ int main() {
     for (int i = 0; i < SET_SIZE; ++i) {
         char* username = str_nd();
         char* password = str_nd();
-        int key = create_user(username,password, all_users_id);
+        Suser user = create_user(username, password, all_users_id);
+        int key = get_user_key(user);
         if (!(is_remember) && is_one_of_the_ghost(all_users_id, key)){
             is_remember = !is_remember;
             remembered_key = key;
         }
+        delete_user(user);
     }
     bool b = set_has(all_users_id, remembered_key);
     if (is_remember){
@@ -115,12 +121,15 @@ int main() {
         int key = nd();
         int comments = nd();
         assume(comments >= 0);
-        create_post(key, comments, posts);
+        Post post = create_post(key, comments, posts);
+        delete_post(post);
     }
     int best_post_key = get_best_post(posts);
     int nd_key = nd();
     if (is_one_of_the_ghost(posts, nd_key) && set_has(posts, nd_key) && best_post_key != -1){
         sassert(best_post_key >= nd_key);
+        bool cond = set_verify_sort(posts);
+        sassert(cond);
     }
 
     //verify that delete from the set is working
@@ -147,8 +156,8 @@ int main() {
         }
     }
 
-    //verify that a partial set of other set (like set of someone's friends in facebook from the set of all users in
-    // facebook) is totally icluded in it
+    //verify that a partial set of other set (like set of someone's friends in facebook from the set of all users
+    //) is totally included in it
     Suser* users = users_nd();
     Suser* best_users = xmalloc(5* sizeof(Suser));
     int k = 0;
@@ -161,6 +170,12 @@ int main() {
     int l = nd();
     assume (l >= 0 && l < k);
     sassert(exists_in_set(users, best_users[l]));
+
+    //delete all allocations
+    delete_set(all_users_id);
+    delete_set(posts);
+    delete_node(user1);
+    delete_node(user2);
     free(best_users);
 
 

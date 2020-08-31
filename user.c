@@ -4,8 +4,8 @@
 
 #include "user.h"
 
-#define BUFFER_SIZE 8
-#define MIN_LENGTH 4
+#define BUFFER_SIZE 16
+#define MIN_LENGTH 8
 
 extern char *str_nd();
 extern int nd();
@@ -43,18 +43,23 @@ struct user_t{
     char *m_User_name;
     char *m_Password;
     int m_UserId;
-    //to be defined
-    struct Set* m_Friends_id_list;
 };
 
-int create_user(char* user_name, char* password, struct Set* all_users_id){
+Suser create_user(char* user_name, char* password, struct Set* all_users_id){
     Suser user = (Suser)xmalloc(sizeof(struct user_t));
     credential_check_and_store(user_name, user->m_User_name);
-
-    user->m_Friends_id_list = set_create();
 
     int key = nd();
     user->m_UserId = key;
     set_insert(all_users_id, key);
-    return key;
+    return user;
+}
+
+int get_user_key(Suser user){
+    return user->m_UserId;
+}
+
+void delete_user(Suser user){
+    free(user->m_User_name);
+    free(user);
 }
