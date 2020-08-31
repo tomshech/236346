@@ -10,9 +10,12 @@
 #include <stdbool.h>
 
 extern int nd();
+
 extern unsigned int uint_nd();
 
-struct set_element{
+void *safe_malloc(size_t sz);
+
+struct set_element {
     int val;
     bool has;
 };
@@ -37,7 +40,7 @@ void set_sort(struct Set *s);
 
 int set_get_max_element(struct Set *s);
 
-struct set_element* get_set_elements(struct Set *s);
+struct set_element *get_set_elements(struct Set *s);
 
 bool set_verify_sort(struct Set *s);
 

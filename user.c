@@ -11,12 +11,7 @@ extern char *str_nd();
 extern int nd();
 extern unsigned int uint_nd();
 
-void *xmalloc(size_t sz) {
-    void *p;
-    p = malloc(sz);
-    assume((p) > 0);
-    return p;
-}
+
 
 void str_copy(char* dest, char* src, int size){
     for (int l = 0; l < size; l++) {
@@ -29,7 +24,7 @@ void credential_check_and_store(char* credential, char* credential_dst) {
 
     int size = 0;
     for (; size < BUFFER_SIZE && credential[size] != '\0'; size++);
-    credential_dst = (char *) xmalloc(BUFFER_SIZE);
+    credential_dst = (char *) safe_malloc(BUFFER_SIZE);
 
     str_copy(credential_dst, credential, size);
 
@@ -46,7 +41,7 @@ struct user_t{
 };
 
 Suser create_user(char* user_name, char* password, struct Set* all_users_id){
-    Suser user = (Suser)xmalloc(sizeof(struct user_t));
+    Suser user = (Suser)safe_malloc(sizeof(struct user_t));
     credential_check_and_store(user_name, user->m_User_name);
 
     int key = nd();

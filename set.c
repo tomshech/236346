@@ -5,6 +5,13 @@
 
 #define SET_SIZE 3
 
+void *safe_malloc(size_t sz) {
+    void *p;
+    p = malloc(sz);
+    assume((p) > 0);
+    return p;
+}
+
 int get_set_element(struct set_element s){
     return s.val;
 }
@@ -44,7 +51,7 @@ static void bubbleSort(struct Set *s)
 
 
 struct Set *set_create() {
-    struct Set *a = malloc(sizeof(struct Set));
+    struct Set *a = safe_malloc(sizeof(struct Set));
     for (int i = 0; i < SET_SIZE; i++) {
         a->ghosts[i].val = nd();
         for (int j = 0; j < i; ++j) {

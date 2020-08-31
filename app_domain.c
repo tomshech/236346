@@ -30,7 +30,7 @@ typedef struct Set{
 } Set;
 
 Node *mk_node (int user_id, int rank) {
-    Node* res = (Node*) xmalloc(sizeof(struct Node));
+    Node* res = (Node*) safe_malloc(sizeof(struct Node));
     res->user_id = user_id;
     res->rank = rank;
     res->next = NULL;
@@ -42,7 +42,7 @@ void delete_node(Node* node){
 }
 
 Set* mk_list() {
-    Set*res = (Set*) xmalloc(sizeof(struct Set));
+    Set*res = (Set*) safe_malloc(sizeof(struct Set));
     res->head = NULL;
     return res;
 }
@@ -167,7 +167,7 @@ int main() {
     //verify that a partial set of other set (like set of someone's friends in facebook from the set of all users
     //) is totally included in it
     Suser* users = users_nd();
-    Suser* best_users = xmalloc(5* sizeof(Suser));
+    Suser* best_users = safe_malloc(5* sizeof(Suser));
     int k = 0;
     for (int j = 0; j < 5; ++j) {
         assume(users[j] != NULL);

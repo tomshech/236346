@@ -10,7 +10,7 @@ typedef struct post{
 }*Post;
 
 Post create_post(int key, int comments, struct Set* posts){
-    Post post = malloc(sizeof(*post));
+    Post post = safe_malloc(sizeof(*post));
     post->key = key;
     post->comments = comments;
     set_insert(posts, comments);
