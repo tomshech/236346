@@ -50,13 +50,14 @@ void delete_node(Node *node) {
     free(node);
 }
 
-
+//created an empty set
 Set *mk_set() {
     Set *res = (Set *) safe_malloc(sizeof(struct Set));
     res->head = NULL;
     return res;
 }
 
+//gets a set and an user id and returns the user if exists in the set, otherwise returns NULL
 Node *exists(Set *set, int user_id) {
     for (Node *it = set->head; it != NULL; it = it->next) {
         if (it->user_id == user_id) {
@@ -66,7 +67,8 @@ Node *exists(Set *set, int user_id) {
     return NULL;
 }
 
-Node *ranked_user(Set *set, int giver_id, int given_id, int rank) {
+//gets a
+Node *ranked_user(Set *set, int given_id, int rank) {
     Node *user_to_add = exists(set, given_id);
     if (!user_to_add) {
         Node *node = mk_node(given_id, 0);
@@ -165,8 +167,8 @@ int main() {
     int user1_key = nd();
     int user2_key = nd();
     assume(user1_key != user2_key && set_has(all_users_id, user1_key) && set_has(all_users_id, user2_key));
-    Node *user1 = ranked_user(ranked_users, user1_key, user2_key, 5);
-    Node *user2 = ranked_user(ranked_users, user2_key, user1_key, 10);
+    Node *user1 = ranked_user(ranked_users, user1_key, 5);
+    Node *user2 = ranked_user(ranked_users, user2_key, 10);
 
     for (it = ranked_users->head; it != NULL; it = it->next) {
         if (g_active && it->user_id == remember_id) {
