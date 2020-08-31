@@ -7,10 +7,7 @@ The command I used to verify my project:
 
 sea pf -O3 app_domain.c set.c user.c post.c --inline --cex=out.ll -m64 --log=cex
 
-
-
-Project in Computer-Aided Verification
-Tom Shech – 205482771
+**Documentation
 
 In my project I decided to implement the application side. The idea was “mini Facebook” when each user can post posts, and have comments, but I also added a dimension of “ranking” to have the most-commented post and best users. I decided to verify the logical features of the application.
 I tried to use all the aspects we saw in class and more.
