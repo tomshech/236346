@@ -117,6 +117,9 @@ struct set_element* get_set_elements(struct Set *s){
     return s->ghosts;
 }
 
+//gets a set and return true if the set is sorted, false otherwise
+// take every two number in the set, if the first number you took appeared before in the set, than
+//it must be bigger than the other one.
 bool set_verify_sort(struct Set *s){
     unsigned i = uint_nd();
     unsigned j = uint_nd();

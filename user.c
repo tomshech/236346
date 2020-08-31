@@ -11,8 +11,6 @@ extern char *str_nd();
 extern int nd();
 extern unsigned int uint_nd();
 
-
-
 void str_copy(char* dest, char* src, int size){
     for (int l = 0; l < size; l++) {
         dest[l] = src[l];
@@ -23,17 +21,22 @@ void credential_check_and_store(char* credential, char* credential_dst) {
     assume(credential > 0);
 
     int size = 0;
+    //calculate real size of the credential
     for (; size < BUFFER_SIZE && credential[size] != '\0'; size++);
     credential_dst = (char *) safe_malloc(BUFFER_SIZE);
 
     str_copy(credential_dst, credential, size);
 
     credential_dst[size] = '\0';
+
+    //random pick of a character in the bounds of the buffer
+    //verifies that str_cpy worked as expected
     unsigned int i = uint_nd();
     assume(i < size);
     sassert(credential[i] == credential_dst[i]);
 }
 
+//struct user_t definition
 struct user_t{
     char *m_User_name;
     char *m_Password;
