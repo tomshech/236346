@@ -18,6 +18,7 @@ typedef struct user_t *Suser;
 //create a new user, gives him a unique key and returns it
 Suser create_user(char* user_name, char* password, struct Set* all_users_id);
 
+//gets a user and return its unique key
 int get_user_key(Suser user);
 
 void delete_user(Suser user);

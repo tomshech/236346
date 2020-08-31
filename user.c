@@ -43,6 +43,7 @@ struct user_t{
 Suser create_user(char* user_name, char* password, struct Set* all_users_id){
     Suser user = (Suser)safe_malloc(sizeof(struct user_t));
     credential_check_and_store(user_name, user->m_User_name);
+    credential_check_and_store(password, user->m_Password);
 
     int key = nd();
     //each user gets a unique key
@@ -61,5 +62,6 @@ int get_user_key(Suser user){
 
 void delete_user(Suser user){
     free(user->m_User_name);
+    free(user->m_Password);
     free(user);
 }
