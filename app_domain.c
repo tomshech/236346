@@ -99,8 +99,11 @@ int main() {
     for (int i = 0; i < SET_SIZE; ++i) {
         char* username = str_nd();
         char* password = str_nd();
+        //in that function below i send the credentials to the DB. therefore i can delete the user itself after that to
+        //avoid memory leaks. i treat all_users_id set as a set i got after a request from the DB.
         Suser user = create_user(username, password, all_users_id);
         int key = get_user_key(user);
+        //Non-deterministically choose one user to remember
         if (!(is_remember) && is_one_of_the_ghost(all_users_id, key)){
             is_remember = !is_remember;
             remembered_key = key;
@@ -108,6 +111,7 @@ int main() {
         delete_user(user);
     }
     bool b = set_has(all_users_id, remembered_key);
+    //here we can argue that it was really inserted to the set, only if the flag is true
     if (is_remember){
         int value = set_get_element(all_users_id, remembered_key);
         if (remembered_key == value){
@@ -127,8 +131,12 @@ int main() {
     int best_post_key = get_best_post(posts);
     int nd_key = nd();
     if (is_one_of_the_ghost(posts, nd_key) && set_has(posts, nd_key) && best_post_key != -1){
+        //first check: i took a number at random. after checking that it's a part of the set, i verified that it must be
+        //smaller than the first element in the set
         sassert(best_post_key >= nd_key);
         bool cond = set_verify_sort(posts);
+        //second check: take every two number in the set, if the first number you took appeared before in the set, than
+        // it must be bigger than the other one.
         sassert(cond);
     }
 

@@ -47,6 +47,9 @@ struct Set *set_create() {
     struct Set *a = malloc(sizeof(struct Set));
     for (int i = 0; i < SET_SIZE; i++) {
         a->ghosts[i].val = nd();
+        for (int j = 0; j < i; ++j) {
+            assume (a->ghosts[i].val != a->ghosts[j].val);
+        }
         a->ghosts[i].has = 0;
     }
     return a;
