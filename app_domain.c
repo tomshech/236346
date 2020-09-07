@@ -120,7 +120,7 @@ int main() {
         Suser user = create_user(username, password, all_users_id);
         int key = get_user_key(user);
         //Non-deterministically choose one user to remember
-        if (!(is_remember) && is_one_of_the_ghost(all_users_id, key)) {
+        if (!(is_remember) && is_one_of_the_ghost(all_users_id, key) && nd()) {
             is_remember = !is_remember;
             remembered_key = key;
         }
@@ -151,11 +151,11 @@ int main() {
         }
     }
     int best_post_key = get_best_post(posts);
-    int nd_key = nd();
-    if (is_one_of_the_ghost(posts, nd_key) && set_has(posts, nd_key) && best_post_key != -1) {
+    int num_of_comments = nd();
+    if (is_one_of_the_ghost(posts, num_of_comments) && set_has(posts, num_of_comments) && best_post_key != -1) {
         //first check: i took a number at random. after checking that it's a part of the set, i verified that it must be
         //smaller than the first element in the set
-        sassert(best_post_key >= nd_key);
+        sassert(best_post_key >= num_of_comments);
         bool cond = set_verify_sort(posts);
         //second check: take every two number in the set, if the first number you took appeared before in the set, than
         // it must be bigger than the other one.
@@ -200,6 +200,10 @@ int main() {
     int l = nd();
     assume(l >= 0 && l < k);
     sassert(exists_in_set(users, best_users[l]));
+
+
+
+
 
     //delete all allocations to avoid memory leaks
     delete_set(all_users_id);

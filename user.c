@@ -12,7 +12,14 @@ extern int nd();
 extern unsigned int uint_nd();
 
 void str_copy(char* dest, char* src, int size){
+    int offset = 0;
+    //below we can even take array_size to be sizeof(char) * BUFFER_SIZE and it will be safe,
+    // but since I have already calculated the real size and it's more precise than BUFFER_SIZE, i will take that
+    unsigned int array_size = sizeof(char) * size; //actually, equals to size, but just because sizeof(char) equals to 1
     for (int l = 0; l < size; l++) {
+        offset = sizeof(char) * l;
+        sassert (offset < array_size);
+        sassert (offset >= 0);
         dest[l] = src[l];
     }
 }
